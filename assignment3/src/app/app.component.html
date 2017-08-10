@@ -1,0 +1,9 @@
+<div class="container">
+  <br>
+  <button (click)="toggle()" class="btn btn-primary"> {{buttonName}} </button>
+  <p *ngIf="isDisplay"> Your password is Tuna!</p>
+
+  <p *ngFor="let c of buttonClickedLog" [ngStyle]="{backgroundColor : getBackgroundColor(c)}" [ngClass]="{fontColor : getFiftItem(c)}">
+    {{c}}
+  </p>
+</div>
