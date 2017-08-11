@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import {Subject} from 'rxjs/Subject';
 
 import {Recipe} from './recipe.model';
 import {Ingredient} from '../shared/ingredient.model';
@@ -16,6 +17,8 @@ export class RecipeService {
     'http://media3.sailusfood.com/wp-content/uploads/2016/02/cheese-corn-balls.jpg',
     [new Ingredient('Buns', 2),new Ingredient('Meat', 2)])
   ];
+
+  recipeChanged = new Subject<Recipe[]>();
   constructor(private slService : ShoppingListService) { }
 
   getRecipes() {
@@ -28,6 +31,21 @@ export class RecipeService {
 
   addIngredientsToShoppingList(ingredients : Ingredient[]) {
     this.slService.addIngredients(ingredients);
+  }
+
+  addRecipe(recipe : Recipe) {
+    this.recipes.push(recipe);
+    this.recipeChanged.next(this.recipes.slice());
+  }
+
+  updateRecipe(index : number, recipe : Recipe) {
+    this.recipes[index] = recipe;
+    this.recipeChanged.next(this.recipes.slice());
+  }
+
+  deleteRecipe(index : number) {
+    this.recipes.splice(index, 1);
+    this.recipeChanged.next(this.recipes.slice());
   }
 
 }

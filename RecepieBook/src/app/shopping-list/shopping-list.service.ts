@@ -11,12 +11,18 @@ export class ShoppingListService {
   ];
 
   ingredientAdded = new Subject<void>();
+  itemmEditStarted = new Subject<number>();
 
   constructor() {
   }
 
   addIngredient(ingredient : Ingredient) {
     this.ingredients.push(ingredient);
+    this.ingredientAdded.next();
+  }
+
+  updateIngredient(index : number, ingredient : Ingredient) {
+    this.ingredients[index] = ingredient;
     this.ingredientAdded.next();
   }
 
@@ -27,6 +33,15 @@ export class ShoppingListService {
 
   getIngredients() {
     return this.ingredients.slice();
+  }
+
+  getIngredient(index : number) {
+    return this.ingredients.slice()[index];
+  }
+
+  deleteIngredient(index : number) {
+    this.ingredients.splice(index, 1);
+    this.ingredientAdded.next();
   }
 
 }
