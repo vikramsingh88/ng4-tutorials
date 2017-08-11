@@ -4,6 +4,7 @@ import {Subject} from 'rxjs/Subject';
 import {Recipe} from './recipe.model';
 import {Ingredient} from '../shared/ingredient.model';
 import {ShoppingListService} from '../shopping-list/shopping-list.service';
+import {ServerService} from './server.service';
 
 @Injectable()
 export class RecipeService {
@@ -19,7 +20,7 @@ export class RecipeService {
   ];
 
   recipeChanged = new Subject<Recipe[]>();
-  constructor(private slService : ShoppingListService) { }
+  constructor(private slService : ShoppingListService, private serverService : ServerService) { }
 
   getRecipes() {
     return this.recipes.slice();
@@ -46,6 +47,20 @@ export class RecipeService {
   deleteRecipe(index : number) {
     this.recipes.splice(index, 1);
     this.recipeChanged.next(this.recipes.slice());
+  }
+
+  saveRecipes() {
+    this.serverService.saveRecipes(this.recipes).subscribe((res : any[]) => {
+      console.log(res);
+    });
+  }
+
+  getRecipesFromServer() {
+    this.serverService.getRecipes().subscribe((res : any[]) => {
+      console.log(res);
+      this.recipes = res;
+      this.recipeChanged.next(this.recipes.slice());
+    });
   }
 
 }
